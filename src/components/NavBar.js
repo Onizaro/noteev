@@ -2,10 +2,10 @@ import './NavBar.css'
 
 function NavBar() {
     return (
-        <div class="navbar">
-            <ul class="nav-items">
+        <div className="navbar">
+            <ul className="nav-items">
                 <li><input placeholder="search"></input></li>
-                <div class="auth">
+                <div className="auth">
                     <li><button>login</button></li>
                     <li><button>sign in</button></li>
                 </div>
