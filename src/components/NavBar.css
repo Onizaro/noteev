@@ -1,0 +1,40 @@
+ul {
+    list-style: none;
+}
+
+.navbar {
+    background-color: #CB997E;
+    margin: 0;
+    height: 65px;
+    position: fixed;
+    width: 100vw;
+    color: #96705c;
+    
+}  
+
+.nav-items {
+    display: flex;
+    flex-direction: row;
+}
+
+input  {
+    position: relative;
+    top: 2px;
+    height: 50px;
+    margin: 5px;
+    width: 450px;
+    border-radius: 15px;
+    background-color: #FFE8D6;
+    border: 0;
+    text-align: center;
+    outline: none;
+    color: #96705c;
+    &::placeholder{
+        color: #96705c;
+    }
+    transition: transform .3s ease-in-out;
+    &:hover{
+        transform: scaleX(1.05) scaleY(1.05);
+    }
+    
+}
