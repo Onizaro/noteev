@@ -15,6 +15,7 @@ ul {
 .nav-items {
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
 }
 
 input  {
@@ -23,7 +24,7 @@ input  {
     height: 50px;
     margin: 5px;
     width: 450px;
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: #FFE8D6;
     border: 0;
     text-align: center;
@@ -36,5 +37,29 @@ input  {
     &:hover{
         transform: scaleX(1.05) scaleY(1.05);
     }
-    
+}
+
+
+.auth {
+    display: flex;
+    width: 200px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.auth li button {
+    background-color: #FFE8D6;
+    height: 30px;
+    width: 80px;
+    border-radius: 10px;
+    border: 0;
+    color: #96705c;
+
+
+    transition: transform .3s ease-in-out, color .3s ease-in-out, background-color .3s ease-in-out;
+    &:hover{
+        transform: scaleX(1.15) scaleY(1.15);
+        background-color: #96705c;
+        color: #FFE8D6;
+    }
 }
