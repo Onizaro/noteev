@@ -1,5 +1,4 @@
 import './NavBar.css'
-import 'keyboard-css'
 
 function NavBar() {
     return (

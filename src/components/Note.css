@@ -1,0 +1,35 @@
+.note {
+    border-radius: 7px;
+    border: 2px dashed #96705c;
+    max-width: 250px;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #cb997e;
+    transition: transform .2s ease-in-out, box-shadow .2s ease-in-out;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px;
+    padding: 10px;
+    margin-bottom: 25px;
+    overflow: hidden;
+}
+
+.note:hover {
+    transform: translate3d(0,-5px, 5px);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.note span {
+    white-space: nowrap;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #ffe8d6;
+    display: block;
+    cursor: pointer;  
+    margin-right: 5px;
+}
+
+
+
+

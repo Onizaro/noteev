@@ -8,22 +8,22 @@ ul {
     height: 65px;
     width: 100vw;
     color: #96705c;
-    
 }  
 
 .nav-items {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+	align-items: baseline;
 }
 
 input, textarea  {
     position: relative;
     top: 2px;
-    height: 50px;
+    height: 45px;
     margin: 5px;
-    width: 450px;
-    border-radius: 10px;
+    width: 400px;
+    border-radius: 7px;
     background-color: #FFE8D6;
     border: 0;
     text-align: center;
@@ -321,6 +321,10 @@ a.key:active:after,
 button.key.active:after,
 button.key:active:after {
 	transform: translate3d(0, -5px, 0);
+}
+
+.key {
+	max-height: 42px;
 }
 
 
