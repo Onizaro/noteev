@@ -7,6 +7,7 @@ import Note from "./components/Note";
 function App() {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewnote] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const addNote = () => {
     if (newNote.trim() !== "") {
@@ -19,9 +20,13 @@ function App() {
     setNotes(notes.filter((_, i) => i !== index));
   };
 
+  const filteredNotes = notes.filter(note => 
+    note.toLowerCase().includes(searchTerm.toLowerCase()) || searchTerm === ""
+  );
+
   return (
     <div className="App">
-      <NavBar />
+      <NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
       <header>
         <input
@@ -38,18 +43,17 @@ function App() {
             Add
           </button>
         </div>
-        
       </header>
       
-
       <section className="notes">
-        {notes.length > 0 && <h1>My notes</h1>}
+        {filteredNotes.length > 0 && <h1>My notes</h1>}
         <ul className="note-list">
-          {notes.map((note, index) => (
+          {filteredNotes.map((note, index) => (
             <Note key={index} note={note} onDelete={() => deleteNote(index)}/>
           ))}
         </ul>
       </section>
+
       <footer>
         <div id="fixed-buttons">
           <button className="key" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>↑</button>
