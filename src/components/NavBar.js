@@ -1,4 +1,5 @@
 import './NavBar.css'
+import 'keyboard-css'
 
 function NavBar() {
     return (
@@ -6,8 +7,8 @@ function NavBar() {
             <ul className="nav-items">
                 <li><input placeholder="search"></input></li>
                 <div className="auth">
-                    <li><button>login</button></li>
-                    <li><button>sign in</button></li>
+                    <li><button className='key'>login</button></li>
+                    <li><button className='key'>sign in</button></li>
                 </div>
                 
             </ul>

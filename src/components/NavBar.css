@@ -33,9 +33,9 @@ input  {
     &::placeholder{
         color: #96705c;
     }
-    transition: transform .3s ease-in-out;
+    transition: transform .15s ease-in-out;
     &:hover{
-        transform: scaleX(1.05) scaleY(1.05);
+        transform: scaleX(1.05) scaleY(1.03);
     }
 }
 
@@ -51,15 +51,280 @@ input  {
     background-color: #FFE8D6;
     height: 30px;
     width: 80px;
-    border-radius: 10px;
+    border-radius: 5px;
     border: 0;
     color: #96705c;
-
-
-    transition: transform .3s ease-in-out, color .3s ease-in-out, background-color .3s ease-in-out;
-    &:hover{
-        transform: scaleX(1.15) scaleY(1.15);
-        background-color: #96705c;
-        color: #FFE8D6;
-    }
 }
+
+
+a.key:after,
+button.key:after {
+	border-color: #bb917b;
+	border-top-color: hsl(21, 32%, 61%);
+	border-right-color: #bb917b;
+	border-bottom-color: hsl(21, 32%, 61%);
+	border-left-color: hsl(21, 32%, 61%);
+}
+
+a.key:after,
+button.key:after {
+	border-radius: .5rem;
+	border-width: .125rem;
+	bottom: -10px;
+	left: -.3125rem;
+	right: -.3125rem;
+	top: 0;
+	transform: translateZ(-5px);
+}
+
+a.key:after,
+button.key:after {
+	border-color: #96705c;
+}
+
+.key:after {
+	border-style: solid;
+	box-sizing: content-box;
+	content: "";
+	display: block;
+	position: absolute;
+	transform-style: preserve-3d;
+	transition: all .25s cubic-bezier(.2, 1, .2, 1);
+}
+
+.key:after {
+	border-radius: .5rem;
+	border-width: .125rem;
+	bottom: -9px;
+	left: -.3125rem;
+	right: -.3125rem;
+	top: -3px;
+	transform: translateZ(-3px);
+	border-color: #bb917b;
+}
+
+a.key,
+button.key {
+	font-size: 1rem;
+	line-height: 1.5;
+	margin: .375rem .375rem .6875rem;
+	padding: .375rem .75rem;
+	box-shadow: 0 0 #96705c, 0 0 #96705c, 0 1px #96705c, 0 2px #96705c, 0 3px #96705c, 0 4px #96705c, 0 5px #96705c, 2px 2.5px 4px #cf9e84, 0 -1px 2.5px #cf9e84;
+	background-color: #ffe8d6;
+	border-color: #fdcfac;
+	color: #96705c;
+	cursor: pointer;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+}
+
+.key {
+	font-size: inherit;
+	line-height: inherit;
+	margin: .25rem .25rem .4375rem;
+	padding: .1rem .4rem;
+	box-shadow: 0 0 #96705c, 0 0 #96705c, 0 1px #96705c, 0 2px #96705c, 0 3px #96705c, 0 4px #96705c, 0 5px #96705c, 2px 2.5px 4px #cf9e84, 0 -1px 2.5px #cf9e84;
+	background-color: #ffe8d6;
+	color: #96705c;
+	backface-visibility: hidden;
+	border: 1px solid #fdcfac;
+	border-radius: .25rem;
+	display: inline-block;
+	font-family: SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+	font-weight: 400;
+	text-align: left;
+	transform: translateZ(5px);
+	transform-style: preserve-3d;
+	transition: all .25s cubic-bezier(.2, 1, .2, 1);
+}
+
+.key:hover {
+	transform: translateZ(0px);
+}
+
+a.key.focus:after,
+a.key.hover:after,
+a.key:focus:after,
+a.key:hover:after,
+button.key.focus:after,
+button.key.hover:after,
+button.key:focus:after,
+button.key:hover:after {
+	transform: translate3d(0, -1px, -5px);
+}
+
+
+a.key.focus,
+a.key.hover,
+a.key:focus,
+a.key:hover,
+button.key.focus,
+button.key.hover,
+button.key:focus,
+button.key:hover {
+	outline: none;
+}
+
+a.key.focus,
+a.key.hover,
+a.key:focus,
+a.key:hover,
+button.key.focus,
+button.key.hover,
+button.key:focus,
+button.key:hover {
+	box-shadow: 0 0 #96705c, 0 0 #96705c, 0 1px #96705c, 0 2px #96705c, 0 3px #96705c, 0 4px #96705c, 2px 2px 4px #cf9e84, 0 -1px 2px #cf9e84;
+	background-color: #fdcfac;
+	color: #96705c;
+}
+
+a.key.focus,
+a.key.hover,
+a.key:focus,
+a.key:hover,
+button.key.focus,
+button.key.hover,
+button.key:focus,
+button.key:hover {
+	transform: translate3d(0, 1px, 5px);
+}
+
+
+a.key.focus,
+a.key.hover,
+a.key:focus,
+a.key:hover,
+button.key.focus,
+button.key.hover,
+button.key:focus,
+button.key:hover {
+	outline: none;
+}
+
+
+a.key.active,
+a.key:active,
+button.key.active,
+button.key:active {
+	background-color: #fdcfac;
+	box-shadow: 0 0 1px 1px #fdcfac;
+	color: #96705c;
+}
+
+a.key.focus,
+a.key.hover,
+a.key:focus,
+a.key:hover,
+button.key.focus,
+button.key.hover,
+button.key:focus,
+button.key:hover {
+	box-shadow: 0 0 #96705c, 0 0 #96705c, 0 1px #96705c, 0 2px #96705c, 0 3px #96705c, 0 4px #96705c, 2px 2px 4px #cf9e84, 0 -1px 2px #cf9e84;
+	background-color: #fdcfac;
+	color: #96705c;
+}
+
+a.key.active,
+a.key:active,
+button.key.active,
+button.key:active {
+	border-color: transparent;
+	box-shadow: none;
+	transform: translate3d(0, 5px, 0);
+}
+
+a.key.focus,
+a.key.hover,
+a.key:focus,
+a.key:hover,
+button.key.focus,
+button.key.hover,
+button.key:focus,
+button.key:hover {
+	transform: translate3d(0, 1px, 5px);
+}
+
+button:active {
+	border-style: inset;
+}
+
+
+a.key.active:after,
+a.key:active:after,
+button.key.active:after,
+button.key:active:after {
+	transform: translate3d(0, -5px, 0);
+}
+
+a.key.focus:after,
+a.key.hover:after,
+a.key:focus:after,
+a.key:hover:after,
+button.key.focus:after,
+button.key.hover:after,
+button.key:focus:after,
+button.key:hover:after {
+	transform: translate3d(0, -1px, -5px);
+}
+
+
+a.key.active,
+a.key:active,
+button.key.active,
+button.key:active {
+	background-color: #e6e6e6;
+	box-shadow: 0 0 1px 1px #fdcfac;
+	color: #96705c;
+}
+
+
+a.key.active,
+a.key:active,
+button.key.active,
+button.key:active {
+	border-color: transparent;
+	box-shadow: none;
+	transform: translate3d(0, 5px, 0);
+}
+
+
+a.key.active,
+a.key:active,
+button.key.active,
+button.key:active {
+	border-color: transparent;
+	box-shadow: none;
+	transform: translate3d(0, 5px, 0);
+}
+
+a.key.active,
+a.key:active,
+button.key.active,
+button.key:active {
+	background-color: #fdcfac;
+	box-shadow: 0 0 1px 1px #fdcfac;
+	color: #96705c;
+}
+
+button:active {
+	border-style: inset;
+}
+
+
+a.key.active:after,
+a.key:active:after,
+button.key.active:after,
+button.key:active:after {
+	transform: translate3d(0, -5px, 0);
+}
+
+
+a.key.active:after,
+a.key:active:after,
+button.key.active:after,
+button.key:active:after {
+	transform: translate3d(0, -5px, 0);
+}
+
+
+
+
