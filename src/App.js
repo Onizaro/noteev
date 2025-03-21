@@ -17,7 +17,9 @@ function App() {
   };
 
   const deleteNote = (index) => {
-    setNotes(notes.filter((_, i) => i !== index));
+    if (window.confirm("Are you sure?")) {
+      setNotes(notes.filter((_, i) => i !== index));
+    }
   };
 
   const filteredNotes = notes.filter(note => 
@@ -35,6 +37,7 @@ function App() {
             placeholder="Write here..."
             value={newNote}
             onChange={(e) => setNewnote(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && addNote()}
           />
 
         <div className="add-note">
