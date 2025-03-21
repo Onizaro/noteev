@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "./App.css";
-import './components/NavBar.css'
 import NavBar from "./components/NavBar";
 import PlusIcon from "./icons/plus.svg";
 import Note from "./components/Note";
@@ -27,7 +26,7 @@ function App() {
       <header>
         <input
             type="text"
-            class="write"
+            className="write"
             placeholder="Write here..."
             value={newNote}
             onChange={(e) => setNewnote(e.target.value)}
@@ -51,6 +50,12 @@ function App() {
           ))}
         </ul>
       </section>
+      <footer>
+        <div id="fixed-buttons">
+          <button className="key" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>↑</button>
+          <button className="key" onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" })}>↓</button>
+        </div>
+      </footer>
     </div>
   );
 }
