@@ -1,70 +1,19 @@
-import { useState } from "react";
-import "./App.css";
-import NavBar from "./components/NavBar";
-import PlusIcon from "./icons/plus.svg";
-import Note from "./components/Note";
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import SignIn from "./pages/SignIn";
+import Login from "./pages/Login";
 
-function App() {
-  const [notes, setNotes] = useState([]);
-  const [newNote, setNewnote] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const addNote = () => {
-    if (newNote.trim() !== "") {
-      setNotes([...notes, newNote]);
-      setNewnote(""); 
-    }
-  };
-
-  const deleteNote = (index) => {
-    if (window.confirm("Are you sure?")) {
-      setNotes(notes.filter((_, i) => i !== index));
-    }
-  };
-
-  const filteredNotes = notes.filter(note => 
-    note.toLowerCase().includes(searchTerm.toLowerCase()) || searchTerm === ""
-  );
-
+const App = () => {
   return (
-    <div className="App">
-      <NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-
-      <header>
-        <input
-            type="text"
-            className="write"
-            placeholder="Write here..."
-            value={newNote}
-            onChange={(e) => setNewnote(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && addNote()}
-          />
-
-        <div className="add-note">
-          <button className="key" type="button" onClick={addNote}>
-            <img className="plus-icon" src={PlusIcon} alt="Add Note" />
-            Add
-          </button>
-        </div>
-      </header>
-      
-      <section className="notes">
-        {filteredNotes.length > 0 && <h1>My notes</h1>}
-        <ul className="note-list">
-          {filteredNotes.map((note, index) => (
-            <Note key={index} note={note} onDelete={() => deleteNote(index)}/>
-          ))}
-        </ul>
-      </section>
-
-      <footer>
-        <div id="fixed-buttons">
-          <button className="key" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>↑</button>
-          <button className="key" onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" })}>↓</button>
-        </div>
-      </footer>
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/sign-in" element={<SignIn />} />
+      </Routes>
+    </>
+    
   );
-}
+};
 
 export default App;

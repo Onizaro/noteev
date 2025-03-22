@@ -1,0 +1,117 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-size: 18px;
+    color: #96705c;
+  }
+  
+  
+  body {
+    background-color: #DDBEA9;
+    overflow-x: hidden;
+    
+  }
+  
+  .App {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  
+  header {
+    position: relative;
+    margin-top: 50px;
+    background-color: #FFE8D6;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 60vw;
+    border: 0;
+    border-radius: 15px;
+    height: 100px;
+    color: #96705c;
+    box-shadow: rgba(17, 12, 46, 0.05) 0px 48px 115px 0px;
+    & h1 {
+      position: relative;
+      left: 57px;
+    }
+  }
+  
+  .add-note button {
+    background-color: #CB997E;
+    height: 50px;
+    width: 100px;
+    border-radius: 10px;
+    border: 0;
+    color: #96705c;
+    padding-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .plus-icon {
+    height: 30px;
+    width: 30px;
+    position: relative;
+    right: 5px;
+    top: 1px;
+    border-right: 2px dashed #96705c;
+    padding-right: 5px;
+    padding-left:5px ;
+    transition:border-color .3s ease-in-out;
+  }
+  
+  
+  
+  .write {
+    background-color: #96705c;
+    color: #FFE8D6;
+    &::placeholder {
+      color: #FFE8D6;
+    }
+  }
+  
+  #fixed-buttons{
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #fixed-buttons .key {
+    height: 25px;
+    width: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .notes {
+    position: relative;
+    top: 25px;
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-top: 3px solid #96705c;
+    padding-top: 15px;
+  }
+  
+  .note-list {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-top: 15px;
+    column-gap: 15px;
+    
+  }
+  
+  

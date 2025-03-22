@@ -2,17 +2,19 @@ version: "3.8"
 
 services:
   auth-db:
-    image: postgres:15
+    image: mysql:8
     container_name: auth-db
     restart: always
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: authdb
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: authdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
     ports:
-      - "5432:5432"
+      - "3307:3306"
     volumes:
-      - auth_data:/var/lib/postgresql/data
+      - auth_data:/var/lib/mysql
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   auth-service:
     build: .
@@ -21,15 +23,14 @@ services:
     depends_on:
       - auth-db
     ports:
-      - "8082:8000"
+      - "4665:80"
     volumes:
-      - ./src:/var/www/html  # Monte uniquement le dossier source, pas tout le projet
+      - ./src:/var/www/html
     environment:
-      DATABASE_URL: "pgsql://user:password@auth-db:5432/authdb"
-      DB_HOST: "auth-db"
-      DB_PORT: "5432"
-      DB_USER: "user"
-      DB_PASSWORD: "password"
+      DB_HOST: auth-db
+      DB_NAME: authdb
+      DB_USER: user
+      DB_PASSWORD: password
 
 volumes:
   auth_data:

@@ -325,6 +325,7 @@ button.key:active:after {
 
 .key {
 	max-height: 42px;
+	max-width: 132px;
 }
 
 

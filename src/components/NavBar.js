@@ -1,4 +1,5 @@
 import './NavBar.css';
+import {Link} from 'react-router-dom'
 
 function NavBar({ searchTerm, setSearchTerm }) {
     return (
@@ -12,8 +13,8 @@ function NavBar({ searchTerm, setSearchTerm }) {
                     />
                 </li>
                 <div className="auth">
-                    <li><button className='key'>login</button></li>
-                    <li><button className='key'>sign in</button></li>
+                    <li><Link to="/login"><button className='key' href="login">login</button></Link></li>
+                    <li><Link to="/sign-in"><button className='key'>sign in</button></Link></li>
                 </div>
             </ul>
         </div>
