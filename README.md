@@ -4,23 +4,24 @@
 A web application that allows users to create, edit, and delete personal notes with basic encryption for added security.
 
 ## Main Features
-- **Authentication** (JWT or session-based)
+- **Authentication** (JWT)
 - **CRUD for notes** (Title, content, creation date)
 - **Note encryption** (AES on the backend or WebCrypto on the frontend)
 - **Dark/light mode**
 
 ## Tech Stack
-### Frontend
+### UI
 - React (Next.js) 
 
-### Backend
-- Node.js (Express/NestJS)
+### Microservices
+- Authentication service (php)
+- Note service (php)
 
 ### Database
-- PostgreSQL or SQLite
+- MySQL
 
 ### DevOps
-- Containerization with Docker
+- Containerization with Docker and docker-compose
 - Deployment with Kubernetes (Minikube or k3s for local testing)
 - CI/CD with GitHub Actions
 - Basic logging and monitoring with Prometheus
@@ -29,7 +30,6 @@ A web application that allows users to create, edit, and delete personal notes w
 ### Prerequisites
 - Docker & Docker Compose
 - Node.js 20+
-- PostgreSQL (for production use)
 
 ### Installation
 1. Clone the repository:
