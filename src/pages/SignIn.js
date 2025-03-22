@@ -54,7 +54,7 @@ export default function Register() {
       <h1>Sign In Page</h1>
 
       {message && (
-        <div className={`${message.type === "success" ? "red" : "green"}`}>
+        <div >
           {message.text}
         </div>
       )}

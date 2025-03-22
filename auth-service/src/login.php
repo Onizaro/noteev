@@ -1,6 +1,9 @@
 <?php
 require 'db.php';
-header("Access-Control-Allow-Origin: *");
+require 'jwt.php'; // Bibliothèque pour JWT
+
+header("Access-Control-Allow-Origin: http://localhost:3000");
+header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
@@ -10,24 +13,26 @@ if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
 }
 
 $data = json_decode(file_get_contents("php://input"), true);
-if (!isset($data["identifier"], $data["password"])) {
+if (empty($data["identifier"]) || empty($data["password"])) {
     http_response_code(400);
-    echo json_encode(["error" => "Missing identifier (username/email) or password"]);
+    echo json_encode(["error" => "Missing identifier or password"]);
     exit;
 }
 
-$identifier = $data["identifier"]; // Peut être un username ou un email
+$identifier = trim($data["identifier"]);
 $password = $data["password"];
 
-// Vérification avec username ou email
-$stmt = $pdo->prepare("SELECT password FROM users WHERE username = ? OR email = ?");
+$stmt = $pdo->prepare("SELECT id, username, email, password FROM users WHERE username = ? OR email = ?");
 $stmt->execute([$identifier, $identifier]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($user && password_verify($password, $user["password"])) {
-    echo json_encode(["message" => "Connexion successful"]);
+    $token = generate_jwt(["id" => $user["id"], "username" => $user["username"]]);
+    setcookie("auth_token", $token, time() + 3600, "/", "", false, true);
+    echo json_encode(["message" => "Login successful"]);
 } else {
     http_response_code(401);
     echo json_encode(["error" => "Invalid credentials"]);
 }
+
 ?>

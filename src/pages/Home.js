@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Home.css";
 import NavBar from "../components/NavBar";
 import PlusIcon from "../icons/plus.svg";
 import Note from "../components/Note";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [notes, setNotes] = useState([]);
@@ -26,11 +27,38 @@ const Home = () => {
     note.toLowerCase().includes(searchTerm.toLowerCase()) || searchTerm === ""
   );
 
+  const handleLogout = async () => {
+    await fetch("http://localhost:4665/logout.php", { credentials: "include" });
+    window.location.href = "/login"; // Redirige vers la page de connexion
+  };
+
+
+  // jwt part
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const checkLogin = async () => {
+      const response = await fetch("http://localhost:4665/checkAuth.php", { credentials: "include" });
+      const data = await response.json();
+      if (response.ok) {
+        setUser(data.user);
+        setIsLogged(true);
+      }
+      else {
+        setIsLogged(false);
+      }
+    };
+
+    checkLogin();
+  }, []);
+  const [isLogged, setIsLogged] = useState(user !== null);
+  
   return (
     <div className="App">
-      <NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} isLogged={isLogged} setIsLogged={setIsLogged}/>
 
-      <header>
+      <header className="header">
         <input
             type="text"
             className="write"
@@ -49,7 +77,7 @@ const Home = () => {
       </header>
       
       <section className="notes">
-        {filteredNotes.length > 0 && <h1>My notes</h1>}
+        {filteredNotes.length > 0 && <h1 className="mynotes">My notes</h1>}
         <ul className="note-list">
           {filteredNotes.map((note, index) => (
             <Note key={index} note={note} onDelete={() => deleteNote(index)}/>

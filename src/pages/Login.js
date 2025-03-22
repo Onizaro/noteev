@@ -16,6 +16,7 @@ export default function Login() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ identifier, password }),
+        credentials: "include",
       });
 
       const data = await response.json();
@@ -35,7 +36,7 @@ export default function Login() {
       <h1>Login</h1>
       
       {message && (
-        <div className={`mb-2 p-2 rounded ${message.type === "success" ? "bg-green-500 text-white" : "bg-red-500 text-white"}`}>
+        <div>
           {message.text}
         </div>
       )}

@@ -17,6 +17,11 @@ ul {
 	align-items: baseline;
 }
 
+.searchbar {
+	min-width: 120px;
+	width: 30vw;
+}
+
 input, textarea  {
     position: relative;
     top: 2px;
