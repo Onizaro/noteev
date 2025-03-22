@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  auth-db:
+    image: postgres:15
+    container_name: auth-db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: authdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - auth_data:/var/lib/postgresql/data
+
+  auth-service:
+    build: .
+    container_name: auth-service
+    restart: always
+    depends_on:
+      - auth-db
+    ports:
+      - "8082:8000"
+    volumes:
+      - ./src:/var/www/html  # Monte uniquement le dossier source, pas tout le projet
+    environment:
+      DATABASE_URL: "pgsql://user:password@auth-db:5432/authdb"
+      DB_HOST: "auth-db"
+      DB_PORT: "5432"
+      DB_USER: "user"
+      DB_PASSWORD: "password"
+
+volumes:
+  auth_data:
