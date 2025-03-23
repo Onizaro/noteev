@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./SignIn.css"
+
 
 export default function Login() {
   const [identifier, setIdentifier] = useState(""); // Peut être username ou email
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,6 +25,7 @@ export default function Login() {
 
       if (response.ok) {
         setMessage({ type: "success", text: "Connexion successful!" });
+        navigate("/");
       } else {
         setMessage({ type: "error", text: data.error || "Invalid credentials" });
       }

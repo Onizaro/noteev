@@ -8,9 +8,11 @@ function NavBar({ searchTerm, setSearchTerm, isLogged, setIsLogged  }) {
             <li><Link to="/sign-in"><button className='key'>sign in</button></Link></li>
         </div>
     )
+
     const handleLogout = async () => {
         await fetch("http://localhost:4665/logout.php", { credentials: "include" });
         setIsLogged(false);
+        window.location.reload();
       };
       
 

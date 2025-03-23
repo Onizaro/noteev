@@ -10,7 +10,7 @@ const Home = () => {
   const [newNote, setNewnote] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [user, setUser] = useState(null);
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState();
   const navigate = useNavigate();
 
   // Fetch user notes
@@ -18,6 +18,7 @@ const Home = () => {
     try {
       const response = await fetch("http://localhost:9999/api/getNotes.php", { credentials: "include" });
       const data = await response.json();
+      console.log("API response for notes:", data);
       if (response.ok && data) {
         setNotes(data);  // Make sure 'data' is an array
       } else {
@@ -39,7 +40,6 @@ const Home = () => {
         fetchNotes();
       } else {
         setIsLogged(false);
-        navigate("/login");
       }
     } catch (error) {
       console.error("Error checking authentication", error);
