@@ -105,6 +105,44 @@ elseif ($method === 'GET' && $requestUri === '/api/getNotes.php') {
     // Récupérer les notes de l'utilisateur authentifié
     $controller->getNotes($userData["user"]["id"]);
     exit;
+}
+
+// Route pour supprimer une note
+elseif ($method === 'DELETE' && preg_match('/^\/api\/deleteNote\.php\?id=(\d+)$/', $requestUri, $matches)) {
+    session_start();
+
+    $token = getAuthToken();
+
+    if (!$token) {
+        http_response_code(401);
+        echo json_encode(["error" => "Token manquant"]);
+        exit;
+    }
+
+    $userData = AuthMiddleware::verifyToken($token);
+
+    if (!$userData) {
+        http_response_code(401);
+        echo json_encode(["error" => "Token invalide"]);
+        exit;
+    }
+
+    // Vérifier si l'utilisateur est autorisé à supprimer la note
+    $noteId = (int) $matches[1];
+    $userId = $userData["user"]["id"];
+
+    // Vérifier si la note appartient à l'utilisateur
+    if (!$controller->checkNoteOwnership($noteId, $userId)) {
+        http_response_code(403);
+        echo json_encode(["error" => "Vous ne pouvez pas supprimer cette note"]);
+        exit;
+    }
+
+    // Supprimer la note
+    $controller->deleteNote($noteId);
+
+    echo json_encode(["message" => "Note supprimée avec succès"]);
+    exit;
 } else {
     http_response_code(404);
     echo json_encode(["error" => "Route non trouvée"]);

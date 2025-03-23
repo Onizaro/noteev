@@ -13,46 +13,45 @@ const Home = () => {
   const [isLogged, setIsLogged] = useState(false);
   const navigate = useNavigate();
 
-  // Récupérer les notes de l'utilisateur
+  // Fetch user notes
+  const fetchNotes = async () => {
+    try {
+      const response = await fetch("http://localhost:9999/api/getNotes.php", { credentials: "include" });
+      const data = await response.json();
+      console.log("API response for notes:", data);
+      if (response.ok && data) {
+        setNotes(data);  // Make sure 'data' is an array
+      } else {
+        console.log("No notes available.");
+        setNotes([]);
+      }
+    } catch (error) {
+      console.error("Error fetching notes", error);
+    }
+  };
+
+  const checkLogin = async () => {
+    try {
+      const response = await fetch("http://localhost:4665/checkAuth.php", { credentials: "include" });
+      const data = await response.json();
+      if (response.ok) {
+        setUser(data.user);
+        setIsLogged(true);
+        fetchNotes();
+      } else {
+        setIsLogged(false);
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Error checking authentication", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchNotes = async () => {
-      try {
-        const response = await fetch("http://localhost:9999/api/getNotes.php", { credentials: "include" });
-        const data = await response.json();
-        console.log("Réponse de l'API pour les notes:", data);
-        if (response.ok && data) {
-          setNotes(data);  // Assure-toi que data est un tableau
-        } else {
-          console.log("Aucune note disponible.");
-          setNotes([]);
-        }
-      } catch (error) {
-        console.error("Erreur lors de la récupération des notes", error);
-      }
-    };
-    
-
-    const checkLogin = async () => {
-      try {
-        const response = await fetch("http://localhost:4665/checkAuth.php", { credentials: "include" });
-        const data = await response.json();
-        if (response.ok) {
-          setUser(data.user);
-          setIsLogged(true);
-          fetchNotes();
-        } else {
-          setIsLogged(false);
-          navigate("/login");
-        }
-      } catch (error) {
-        console.error("Erreur lors de la vérification de l'authentification", error);
-      }
-    };
-
     checkLogin();
   }, [navigate]);
 
-  // Ajouter une note via l'API
+  // Add a new note via API
   const addNote = async () => {
     if (newNote.trim() !== "") {
       try {
@@ -61,56 +60,63 @@ const Home = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include", // Important pour la session
+          credentials: "include",
           body: JSON.stringify({ 
             user_id: user.id,
-            content: newNote }),
+            content: newNote
+          }),
         });
-  
+
         console.log("Response headers:", response.headers);
-  
+
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.error || `Erreur HTTP: ${response.status}`);
+          throw new Error(errorData.error || `HTTP error: ${response.status}`);
         }
-  
+
         const data = await response.json();
-        setNotes([...notes, data]); 
+
+        // Reset the new note input
         setNewnote("");
+
+        // Reload notes after adding
+        fetchNotes();
+
       } catch (error) {
-        console.error("Erreur lors de l'ajout de la note", error);
+        console.error("Error adding note", error);
       }
     }
   };
-  
 
-  // Supprimer une note via l'API
+  // Delete a note via API
   const deleteNote = async (id) => {
     if (!window.confirm("Are you sure?")) return;
 
     try {
-      const response = await fetch(`http://localhost:9999/api/deleteNote.php?id=${id}`, {
-        method: "DELETE",
-        credentials: "include",
+      const response = await fetch(`http://localhost:9999/api/deleteNote.php`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ id: id })  // Send the id in the DELETE request body
       });
 
       if (response.ok) {
-        if (Array.isArray(notes)){
-          setNotes(notes.filter((note) => note.id !== id));
-        };
-        
+        // Reload notes after deletion
+        fetchNotes();
       }
+
     } catch (error) {
-      console.error("Erreur lors de la suppression de la note", error);
+      console.error("Error deleting note", error);
     }
   };
-  console.log(notes);
+
   const filteredNotes = Array.isArray(notes)
   ? notes.filter((note) =>
-      note.content.toLowerCase().includes(searchTerm.toLowerCase()) || searchTerm === ""
+      note.content && note.content.toLowerCase().includes(searchTerm.toLowerCase()) || searchTerm === ""
     )
   : [];
-
 
   return (
     <div className="App">
@@ -138,7 +144,11 @@ const Home = () => {
         {filteredNotes.length > 0 && <h1 className="mynotes">My notes</h1>}
         <ul className="note-list">
           {filteredNotes.map((note) => (
-            <Note key={note.id} note={note.content} onDelete={() => deleteNote(note.id)} />
+            <Note 
+              key={note.id}  // Make sure "note.id" is unique
+              note={note.content} 
+              onDelete={() => deleteNote(note.id)} 
+            />
           ))}
         </ul>
       </section>

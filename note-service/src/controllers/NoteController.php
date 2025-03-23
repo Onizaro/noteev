@@ -21,9 +21,18 @@ class NoteController {
         echo json_encode($this->note->getUserNotes($user_id));
     }
 
-    public function deleteNote($id) {
-        echo json_encode(["success" => $this->note->delete($id)]);
+    public function deleteNote($noteId, $user_id) {
+        $query = "DELETE FROM notes WHERE id = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':id', $noteId);
+        
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
     }
+    
 
     
 }
