@@ -21,6 +21,19 @@ function NavBar({ searchTerm, setSearchTerm, isLogged, setIsLogged  }) {
             <li><button onClick={handleLogout}  className='key'>logout</button></li>
         </div>
     )
+
+    const buttons =() => {
+        if (isLogged==null){
+            return (
+                <div className="auth">
+                    
+                </div>
+            );
+        }
+        else {
+            return isLogged ? logged: notLogged
+        }
+    };
     
     return (
         <div className="navbar">
@@ -33,7 +46,7 @@ function NavBar({ searchTerm, setSearchTerm, isLogged, setIsLogged  }) {
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </li>
-                {isLogged ? logged: notLogged}
+                {buttons()}
                 
             </ul>
         </div>

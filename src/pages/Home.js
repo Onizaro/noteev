@@ -10,7 +10,7 @@ const Home = () => {
   const [newNote, setNewnote] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [user, setUser] = useState(null);
-  const [isLogged, setIsLogged] = useState();
+  const [isLogged, setIsLogged] = useState(null);
   const navigate = useNavigate();
 
   // Fetch user notes
@@ -43,6 +43,7 @@ const Home = () => {
       }
     } catch (error) {
       console.error("Error checking authentication", error);
+      setIsLogged(false);
     }
   };
 
