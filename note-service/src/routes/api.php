@@ -108,7 +108,29 @@ elseif ($method === 'GET' && $requestUri === '/api/getNotes.php') {
 }
 
 // Route pour supprimer une note
-elseif ($method === 'DELETE' && preg_match('/^\/api\/deleteNote\.php\?id=(\d+)$/', $requestUri, $matches)) {
+elseif ($method === 'DELETE' && strpos($requestUri, '/api/deleteNote.php') === 0) {
+    // Extraire la query string de l'URL
+    $queryParams = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
+
+    // Vérifier si le paramètre 'id' est présent
+    if (!$queryParams) {
+        http_response_code(400); // Bad request
+        echo json_encode(["error" => "Paramètre 'id' manquant"]);
+        exit;
+    }
+
+    // Convertir la query string en tableau associatif
+    parse_str($queryParams, $params);
+
+    // Si l'id n'est pas dans les paramètres
+    if (!isset($params['id'])) {
+        http_response_code(400); // Bad request
+        echo json_encode(["error" => "Paramètre 'id' manquant"]);
+        exit;
+    }
+
+    $noteId = (int) $params['id'];
+
     session_start();
 
     $token = getAuthToken();
@@ -128,7 +150,6 @@ elseif ($method === 'DELETE' && preg_match('/^\/api\/deleteNote\.php\?id=(\d+)$/
     }
 
     // Vérifier si l'utilisateur est autorisé à supprimer la note
-    $noteId = (int) $matches[1];
     $userId = $userData["user"]["id"];
 
     // Vérifier si la note appartient à l'utilisateur
@@ -143,7 +164,9 @@ elseif ($method === 'DELETE' && preg_match('/^\/api\/deleteNote\.php\?id=(\d+)$/
 
     echo json_encode(["message" => "Note supprimée avec succès"]);
     exit;
-} else {
+}
+
+else {
     http_response_code(404);
     echo json_encode(["error" => "Route non trouvée"]);
     exit;

@@ -18,7 +18,6 @@ const Home = () => {
     try {
       const response = await fetch("http://localhost:9999/api/getNotes.php", { credentials: "include" });
       const data = await response.json();
-      console.log("API response for notes:", data);
       if (response.ok && data) {
         setNotes(data);  // Make sure 'data' is an array
       } else {
@@ -93,13 +92,12 @@ const Home = () => {
     if (!window.confirm("Are you sure?")) return;
 
     try {
-      const response = await fetch(`http://localhost:9999/api/deleteNote.php`, {
+      const response = await fetch(`http://localhost:9999/api/deleteNote.php?id=${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ id: id })  // Send the id in the DELETE request body
       });
 
       if (response.ok) {
