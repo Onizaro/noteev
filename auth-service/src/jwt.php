@@ -3,15 +3,23 @@ require 'vendor/autoload.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Dotenv\Dotenv;
 
-$secret_key = "your_secret_key"; // Mets une clé secrète forte ici
+// Charger les variables d'environnement
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+
+// Récupérer la clé secrète depuis l'environnement
+$secret_key = $_ENV["SECRET_KEY"] ?? die("SECRET_KEY non définie");
+
 
 function generate_jwt($user) {
     global $secret_key;
     
     $payload = [
-        "iat" => time(), // Temps d'émission
-        "exp" => time() + (60 * 60 * 24), // Expiration (24h)
+        "iat" => time(), 
+        "exp" => time() + (60 * 60 * 24), 
         "user" => $user
     ];
 

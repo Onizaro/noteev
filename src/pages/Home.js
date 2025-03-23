@@ -9,64 +9,101 @@ const Home = () => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewnote] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-
-  const addNote = () => {
-    if (newNote.trim() !== "") {
-      setNotes([...notes, newNote]);
-      setNewnote(""); 
-    }
-  };
-
-  const deleteNote = (index) => {
-    if (window.confirm("Are you sure?")) {
-      setNotes(notes.filter((_, i) => i !== index));
-    }
-  };
-
-  const filteredNotes = notes.filter(note => 
-    note.toLowerCase().includes(searchTerm.toLowerCase()) || searchTerm === ""
-  );
-
-  const handleLogout = async () => {
-    await fetch("http://localhost:4665/logout.php", { credentials: "include" });
-    window.location.href = "/login"; // Redirige vers la page de connexion
-  };
-
-
-  // jwt part
   const [user, setUser] = useState(null);
+  const [isLogged, setIsLogged] = useState(false);
   const navigate = useNavigate();
-  
+
+  // Récupérer les notes de l'utilisateur
   useEffect(() => {
-    const checkLogin = async () => {
-      const response = await fetch("http://localhost:4665/checkAuth.php", { credentials: "include" });
-      const data = await response.json();
-      if (response.ok) {
-        setUser(data.user);
-        setIsLogged(true);
+    const fetchNotes = async () => {
+      try {
+        const response = await fetch("http://localhost:9999/api/notes.php", { credentials: "include" });
+        const data = await response.json();
+        if (response.ok) {
+          setNotes(data.notes);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la récupération des notes", error);
       }
-      else {
-        setIsLogged(false);
+    };
+
+    const checkLogin = async () => {
+      try {
+        const response = await fetch("http://localhost:4665/checkAuth.php", { credentials: "include" });
+        const data = await response.json();
+        if (response.ok) {
+          setUser(data.user);
+          setIsLogged(true);
+          fetchNotes();
+        } else {
+          setIsLogged(false);
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Erreur lors de la vérification de l'authentification", error);
       }
     };
 
     checkLogin();
-  }, []);
-  const [isLogged, setIsLogged] = useState(user !== null);
-  
+  }, [navigate]);
+
+  // Ajouter une note via l'API
+  const addNote = async () => {
+    if (newNote.trim() === "") return;
+
+    try {
+      const response = await fetch("http://localhost:9999/api/addNote.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ content: newNote }),
+      });
+
+      if (response.ok) {
+        const newNoteData = await response.json();
+        setNotes([...notes, newNoteData.note]);
+        setNewnote("");
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'ajout de la note", error);
+    }
+  };
+
+  // Supprimer une note via l'API
+  const deleteNote = async (id) => {
+    if (!window.confirm("Are you sure?")) return;
+
+    try {
+      const response = await fetch(`http://localhost:9999/api/deleteNote.php?id=${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        setNotes(notes.filter((note) => note.id !== id));
+      }
+    } catch (error) {
+      console.error("Erreur lors de la suppression de la note", error);
+    }
+  };
+
+  const filteredNotes = notes.filter((note) =>
+    note.content.toLowerCase().includes(searchTerm.toLowerCase()) || searchTerm === ""
+  );
+
   return (
     <div className="App">
-      <NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} isLogged={isLogged} setIsLogged={setIsLogged}/>
+      <NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} isLogged={isLogged} setIsLogged={setIsLogged} />
 
       <header className="header">
         <input
-            type="text"
-            className="write"
-            placeholder="Write here..."
-            value={newNote}
-            onChange={(e) => setNewnote(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && addNote()}
-          />
+          type="text"
+          className="write"
+          placeholder="Write here..."
+          value={newNote}
+          onChange={(e) => setNewnote(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && addNote()}
+        />
 
         <div className="add-note">
           <button className="key" type="button" onClick={addNote}>
@@ -75,12 +112,12 @@ const Home = () => {
           </button>
         </div>
       </header>
-      
+
       <section className="notes">
         {filteredNotes.length > 0 && <h1 className="mynotes">My notes</h1>}
         <ul className="note-list">
-          {filteredNotes.map((note, index) => (
-            <Note key={index} note={note} onDelete={() => deleteNote(index)}/>
+          {filteredNotes.map((note) => (
+            <Note key={note.id} note={note.content} onDelete={() => deleteNote(note.id)} />
           ))}
         </ul>
       </section>
@@ -93,6 +130,6 @@ const Home = () => {
       </footer>
     </div>
   );
-}
+};
 
 export default Home;

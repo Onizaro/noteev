@@ -1,0 +1,75 @@
+version: '3.8'
+
+networks:
+  mynetwork:
+    driver: bridge
+
+services:
+  php-apache:
+    build: ./note-service
+    container_name: note-service-php-apache
+    ports:
+      - "9999:80"
+    volumes:
+      - ./note-service:/var/www/html
+    depends_on:
+      - note-db
+      - auth-service
+    networks:
+      - mynetwork
+
+  note-db:
+    image: mysql:8.0
+    container_name: note-service-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: notes_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3308:3306"
+    volumes:
+      - note_data:/var/lib/mysql
+      - ./note-service/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - mynetwork
+
+  auth-db:
+    image: mysql:8
+    container_name: auth-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: authdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3307:3306"
+    volumes:
+      - auth_data:/var/lib/mysql
+      - ./auth-service/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - mynetwork
+
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    restart: always
+    depends_on:
+      - auth-db
+    ports:
+      - "4665:80"
+    volumes:
+      - ./auth-service/src:/var/www/html
+    environment:
+      DB_HOST: auth-db
+      DB_NAME: authdb
+      DB_USER: user
+      DB_PASSWORD: password
+    networks:
+      - mynetwork
+
+volumes:
+  auth_data:
+  note_data:
