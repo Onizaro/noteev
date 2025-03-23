@@ -17,15 +17,20 @@ const Home = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const response = await fetch("http://localhost:9999/api/notes.php", { credentials: "include" });
+        const response = await fetch("http://localhost:9999/api/getNotes.php", { credentials: "include" });
         const data = await response.json();
-        if (response.ok) {
-          setNotes(data.notes);
+        console.log("Réponse de l'API pour les notes:", data);
+        if (response.ok && data) {
+          setNotes(data);  // Assure-toi que data est un tableau
+        } else {
+          console.log("Aucune note disponible.");
+          setNotes([]);
         }
       } catch (error) {
         console.error("Erreur lors de la récupération des notes", error);
       }
     };
+    
 
     const checkLogin = async () => {
       try {
@@ -49,25 +54,35 @@ const Home = () => {
 
   // Ajouter une note via l'API
   const addNote = async () => {
-    if (newNote.trim() === "") return;
-
-    try {
-      const response = await fetch("http://localhost:9999/api/addNote.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ content: newNote }),
-      });
-
-      if (response.ok) {
-        const newNoteData = await response.json();
-        setNotes([...notes, newNoteData.note]);
+    if (newNote.trim() !== "") {
+      try {
+        const response = await fetch("http://localhost:9999/api/addNote.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // Important pour la session
+          body: JSON.stringify({ 
+            user_id: user.id,
+            content: newNote }),
+        });
+  
+        console.log("Response headers:", response.headers);
+  
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || `Erreur HTTP: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        setNotes([...notes, data]); 
         setNewnote("");
+      } catch (error) {
+        console.error("Erreur lors de l'ajout de la note", error);
       }
-    } catch (error) {
-      console.error("Erreur lors de l'ajout de la note", error);
     }
   };
+  
 
   // Supprimer une note via l'API
   const deleteNote = async (id) => {
@@ -80,16 +95,22 @@ const Home = () => {
       });
 
       if (response.ok) {
-        setNotes(notes.filter((note) => note.id !== id));
+        if (Array.isArray(notes)){
+          setNotes(notes.filter((note) => note.id !== id));
+        };
+        
       }
     } catch (error) {
       console.error("Erreur lors de la suppression de la note", error);
     }
   };
+  console.log(notes);
+  const filteredNotes = Array.isArray(notes)
+  ? notes.filter((note) =>
+      note.content.toLowerCase().includes(searchTerm.toLowerCase()) || searchTerm === ""
+    )
+  : [];
 
-  const filteredNotes = notes.filter((note) =>
-    note.content.toLowerCase().includes(searchTerm.toLowerCase()) || searchTerm === ""
-  );
 
   return (
     <div className="App">
