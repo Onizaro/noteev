@@ -1,7 +1,7 @@
 import './NavBar.css';
 import {Link} from 'react-router-dom'
 
-function NavBar({ searchTerm, setSearchTerm, isLogged, setIsLogged  }) {
+function NavBar({ searchTerm, setSearchTerm, isLogged, setIsLogged, fetchNotes  }) {
     const notLogged = (
         <div className="auth">
             <li><Link to="/login"><button className='key' >login</button></Link></li>
@@ -12,7 +12,7 @@ function NavBar({ searchTerm, setSearchTerm, isLogged, setIsLogged  }) {
     const handleLogout = async () => {
         await fetch("http://localhost:4665/logout.php", { credentials: "include" });
         setIsLogged(false);
-        window.location.reload();
+        fetchNotes();
       };
       
 
@@ -34,6 +34,7 @@ function NavBar({ searchTerm, setSearchTerm, isLogged, setIsLogged  }) {
             return isLogged ? logged: notLogged
         }
     };
+
     
     return (
         <div className="navbar">

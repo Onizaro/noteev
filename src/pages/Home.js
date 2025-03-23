@@ -3,7 +3,6 @@ import "./Home.css";
 import NavBar from "../components/NavBar";
 import PlusIcon from "../icons/plus.svg";
 import Note from "../components/Note";
-import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [notes, setNotes] = useState([]);
@@ -11,7 +10,6 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [user, setUser] = useState(null);
   const [isLogged, setIsLogged] = useState(null);
-  const navigate = useNavigate();
 
   // Fetch user notes
   const fetchNotes = async () => {
@@ -49,7 +47,7 @@ const Home = () => {
 
   useEffect(() => {
     checkLogin();
-  }, [navigate]);
+  }, [setUser]);
 
   // Add a new note via API
   const addNote = async () => {
@@ -74,7 +72,6 @@ const Home = () => {
           throw new Error(errorData.error || `HTTP error: ${response.status}`);
         }
 
-        const data = await response.json();
 
         // Reset the new note input
         setNewnote("");
@@ -91,7 +88,13 @@ const Home = () => {
   // Delete a note via API
   const deleteNote = async (id) => {
     if (!window.confirm("Are you sure?")) return;
-
+  
+    // Trouver la note à supprimer et ajouter la classe 'delete'
+    const updatedNotes = notes.map(note => 
+      note.id === id ? { ...note, isDeleting: true } : note
+    );
+    setNotes(updatedNotes);
+  
     try {
       const response = await fetch(`http://localhost:9999/api/deleteNote.php?id=${id}`, {
         method: 'DELETE',
@@ -100,26 +103,32 @@ const Home = () => {
         },
         credentials: 'include',
       });
-
+  
       if (response.ok) {
-        // Reload notes after deletion
-        fetchNotes();
+        // Après l'animation, retirer la note de l'état
+        setTimeout(() => {
+          setNotes(notes.filter(note => note.id !== id));
+        }, 300); // Correspond au temps de l'animation (300ms)
       }
-
+  
     } catch (error) {
       console.error("Error deleting note", error);
     }
   };
+  
 
   const filteredNotes = Array.isArray(notes)
   ? notes.filter((note) =>
-      note.content && note.content.toLowerCase().includes(searchTerm.toLowerCase()) || searchTerm === ""
+      (note.content && (note.content.toLowerCase().includes(searchTerm.toLowerCase()))) || searchTerm === ""
     )
   : [];
 
+
+  
+
   return (
     <div className="App">
-      <NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} isLogged={isLogged} setIsLogged={setIsLogged} />
+      <NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} isLogged={isLogged} setIsLogged={setIsLogged} fetchNotes={fetchNotes}/>
 
       <header className="header">
         <input
@@ -144,7 +153,7 @@ const Home = () => {
         <ul className="note-list">
           {filteredNotes.map((note) => (
             <Note 
-              key={note.id}  // Make sure "note.id" is unique
+              key={note.id}  
               note={note.content} 
               onDelete={() => deleteNote(note.id)} 
             />
